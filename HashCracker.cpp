@@ -3,52 +3,82 @@
 #include "md5.h"
 #include <sstream>
 #include <cstdlib>
+#include <fstream>
+#include <string>
+
+namespace patch
+{
+    template < typename T > std::string to_string( const T& n )
+    {
+        std::ostringstream stm ;
+        stm << n ;
+        return stm.str() ;
+    }
+}
  
- namespace patch
- {
-     template < typename T > std::string to_string( const T& n )
-     {
-         std::ostringstream stm ;
-         stm << n ;
-         return stm.str() ;
-     }
- }
+using std::string;
+using std::cout;
+using std::endl;
+using std::cin;
  
- using std::string;
- using std::cout;
- using std::endl;
- using std::cin;
+bool checkHash(string hash, string mode);
+void numericCracker(string hash, string mode);
+string hasher(string content, string mode);
+void wordlistCracker(string hash, string mode);
  
- bool checkHash(string hash, string mode);
- void numericCracker(string hash, string mode);
- string hasher(string content, string mode);
- 
- int main(int argc, char *argv[])
- {
-     string input = "grape";
-     string output1 = sha512(input);
-     cout << "C++ Hashcracker (SHA512, MD5)" << endl;
-     cout << "1 - SHA512" << endl;
-     cout << "2 - MD5" << endl;
-     cout << "Enter Number: ";
-     int mode;
-     cin >> mode;
-     string hash;
-     cout << "Enter Hash: ";
-     cin >> hash;
-     switch(mode) {
-     case 1:
-         if(checkHash(hash, "SHA512")) {
-             numericCracker(hash, "SHA512");
-         }
-         break;
-     case 2:
-         if(checkHash(hash, "MD5")) {
-             numericCracker(hash, "MD5");
-         }
-         break;
-     }
-     return 0;
+int main(int argc, char *argv[]) {
+
+    string input = "grape";
+    string output1 = sha512(input);
+    cout << "C++ Hashcracker (SHA512, MD5)" << endl;
+    cout << "1 - SHA512" << endl;
+    cout << "2 - MD5" << endl;
+    cout << "Enter Number: ";
+    int mode;
+    cin >> mode;
+    string hash;
+    cout << "Enter Hash: ";
+    cin >> hash;
+    cout << "Attack Mode" << endl;
+    cout << "1 - Numeric Cracker" << endl;
+    cout << "2 - Wordlist" << endl;
+    cout << "Enter Number: ";
+    int attackVector;
+    cin >> attackVector;
+
+    if(attackVector == 1) {
+        switch(mode) {
+            case 1:
+                if(checkHash(hash, "SHA512")) {
+                    numericCracker(hash, "SHA512");
+                }
+                break;
+            case 2:
+                if(checkHash(hash, "MD5")) {
+                    numericCracker(hash, "MD5");
+                }
+                break;
+        }
+        return 0;
+    }
+    if(attackVector == 2) {
+        switch(mode) {
+            case 1:
+                if(checkHash(hash, "SHA512")) {
+                    wordlistCracker(hash, "SHA512");
+                }
+                break;
+            case 2:
+                if(checkHash(hash, "MD5")) {
+                    wordlistCracker(hash, "MD5");
+                }
+                break;
+        }
+        return 0;
+    }
+    else {
+        exit(0);
+    }
  }
  
  bool checkHash(string hash, string mode) {
@@ -92,3 +122,33 @@
          i++;
      }
  }
+
+void wordlistCracker(string hash, string mode) {
+    int linecount = 0;
+    std::string line;
+    
+    cout << "Wordlist Filename/Path: ";
+    string filepath;
+    cin >> filepath;
+
+    std::ifstream file(filepath.c_str());
+
+    if (!file) {
+        cout << "Unable to open file";
+        exit(1);
+    }
+
+    string s;
+    string bHash;
+    while (std::getline(file, s))
+    {
+        bHash = hasher(s, mode);
+        cout << "[*] Cracking... | " << s << " : " << hash << "\r";
+        if(hash == bHash) {
+            cout << "\nMatch found! " << "Entry: " << s << " Hash: " << hash << endl;
+            exit(0);
+        }
+    }
+    cout << "No match found!" << endl;
+    exit(0);
+}
