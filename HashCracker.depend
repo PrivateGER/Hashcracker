@@ -1,0 +1,23 @@
+# depslib dependency file v1.0
+1516285092 source:c:\users\marc\desktop\c++\hashcracker\sha512.cpp
+	<cstring>
+	<fstream>
+	"sha512.h"
+
+1516285262 c:\users\marc\desktop\c++\hashcracker\sha512.h
+	<string>
+
+1516285810 source:c:\users\marc\desktop\c++\hashcracker\md5.cpp
+	"md5.h"
+	<cstdio>
+
+1516285834 c:\users\marc\desktop\c++\hashcracker\md5.h
+	<cstring>
+	<iostream>
+
+1516288952 source:c:\users\marc\desktop\c++\hashcracker\main.cpp
+	<iostream>
+	"sha512.h"
+	"md5.h"
+	<sstream>
+
