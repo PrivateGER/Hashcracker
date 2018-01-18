@@ -1,0 +1,3 @@
+language: cpp
+compiler: gcc
+script: g++ main.cpp md5.cpp sha512.cpp -o Hashcracker
