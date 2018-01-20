@@ -140,14 +140,16 @@ void wordlistCracker(string hash, string mode) {
 
     string s;
     string bHash;
+    int i = 1;
     while (std::getline(file, s))
     {
         bHash = hasher(s, mode);
-        cout << "[*] Cracking... | " << s << " : " << hash << "\r";
+        cout << "[*] Cracking... | " << i << " : " << s << "\r\e[K";
         if(hash == bHash) {
-            cout << "\nMatch found! " << "Entry: " << s << " Hash: " << hash << endl;
+            cout << "\nMatch found! " << "Entry: " << s << " Hash: " << hash << " Try: " << i << endl;
             exit(0);
         }
+        i++;
     }
     cout << "No match found!" << endl;
     exit(0);
